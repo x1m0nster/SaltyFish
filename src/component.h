@@ -6,8 +6,8 @@
 using std::string;
 using std::unique_ptr;
 using std::vector;
-class Component;
 
+class Component;
 class Subcomponent {
 
   public:
@@ -19,10 +19,8 @@ class Subcomponent {
 };
 
 class Component {
-  private:
-    vector<string> layout;
-
   public:
+    vector<string> layout;
     size_t height, width;
     vector<Subcomponent> subcomponents;
     Component(size_t _height, size_t _width)
@@ -47,17 +45,35 @@ class Component {
     }
 };
 
-class NameBoard : public Component {
+// 自适应长度的单行文本框
+class TextBoard : public Component {
     string name;
 
   public:
-    NameBoard(string _name) : Component(3, _name.size() + 4), name(_name) {
+    TextBoard(string _name) : Component(3, _name.size() + 4), name(_name) {
         (*this)[0] = string(width, '*');
         (*this)[1] = "* " + name + " *";
         (*this)[2] = string(width, '*');
     }
     void draw() {
         (*this)[1] = "* " + name + " *";
+    }
+};
+
+// 绘制图像示例
+class CatImage : public Component {
+
+  public:
+    CatImage() : Component(3, 7) {
+        // clang-format off
+        layout = {
+            " /\\_/\\",
+            "( o.o )",
+            " >   < "
+        };
+        // clang-format on
+    }
+    void draw() {
     }
 };
 
@@ -78,7 +94,10 @@ class TestPage : public Component {
     TestPage() : Component(10, 30) {
         // 组件中添加子组件示例
         // 现在添加的方式有点复杂，需要修改
-        subcomponents.emplace_back(std::make_unique<NameBoard>("Alice"), 1, 1);
+        // 添加顺序也是渲染优先级，从低到高
+        subcomponents.emplace_back(std::make_unique<TextBoard>("Alice"), 1, 1);
+        subcomponents.emplace_back(std::make_unique<TextBoard>("AutoMachineGun"), 5, 1);
+        subcomponents.emplace_back(std::make_unique<CatImage>(), 1, 12);
     }
     void draw() {
         draw_border();
@@ -90,18 +109,5 @@ class TestPage : public Component {
             std::cout << (*this)[i] << "\n";
         }
         std::cout << std::endl;
-    }
-};
-class PetComponent : public Component {
-    string name;
-
-  public:
-    PetComponent(string _name) : Component(3, _name.size() + 4), name(_name) {
-        (*this)[0] = string(width, '*');
-        (*this)[1] = "* " + name + " *";
-        (*this)[2] = string(width, '*');
-    }
-    void draw() {
-        (*this)[1] = "* " + name + " *";
     }
 };
