@@ -63,8 +63,33 @@ class TextBoard : public Component {
 };
 
 // 绘制图像示例
-class CatImage : public Component {
+class CatDynamicImage : public Component {
+  private:
+    int frame = 0;
 
+  public:
+    CatDynamicImage() : Component(3, 7) {
+        // clang-format off
+            layout = {
+                " /\\_/\\",
+                "( o.o )",
+                " >   < "
+            };
+        // clang-format on
+    }
+    void draw() {
+        frame++;
+        if (frame & 1) {
+            layout[1][2] = 'o';
+            layout[1][4] = 'o';
+        } else {
+            layout[1][2] = '-';
+            layout[1][4] = '-';
+        }
+    }
+};
+
+class CatImage : public Component {
   public:
     CatImage() : Component(3, 7) {
         // clang-format off
@@ -99,13 +124,17 @@ class TestPage : public Component {
         // 添加顺序也是渲染优先级，从低到高
         subcomponents.emplace_back(std::make_unique<TextBoard>("Alice"), 1, 1);
         subcomponents.emplace_back(std::make_unique<TextBoard>("AutoMachineGun"), 5, 1);
-        subcomponents.emplace_back(std::make_unique<CatImage>(), 1, 12);
+        subcomponents.emplace_back(std::make_unique<CatDynamicImage>(), 1, 12);
     }
     void draw() {
         draw_border();
         draw_subcomponents();
     }
+    void clearScreen() {
+        std::cout << "\033[2J\033[H" << std::flush;
+    }
     void print() {
+        clearScreen();
         draw();
         for (int i = 0; i < height; i++) {
             std::cout << (*this)[i] << "\n";
@@ -113,5 +142,4 @@ class TestPage : public Component {
         std::cout << std::endl;
     }
 };
-
 } // namespace Component

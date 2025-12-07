@@ -1,6 +1,13 @@
 #include "component.h"
+#include <chrono>
+#include <thread>
+
 int main() {
-    auto main_page = std::make_unique<TestPage>();
-    main_page->print();
+
+    auto page = std::make_unique<Component::TestPage>();
+    while (true) {
+        page->print();
+        std::this_thread::sleep_for(std::chrono::milliseconds(500));
+    }
     return 0;
 }
