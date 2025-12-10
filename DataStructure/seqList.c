@@ -28,14 +28,16 @@ bool Seqlist_Insert(Seqlist*L,int pos,int data){
         printf("Error:Seqlist insert pos is illegal.\n");
         return false;
     }
-    if(pos>L->length){
+    if(pos > L->length + 1){
         printf("Warning:Pos is over this Seqlist,Now change pos is LastPos %d\n",L->length);
-        pos = L->length;
+        pos = L->length + 1;
     }
+    //将 pos > L->length 修改为 pos > length + 1 时才合理 我们应该允许插入值到顺序表末尾
+    //否则 当初始时 顺序表长度为零 往位置1 插入数据 就会被判定为不合法 明显不符合常理
     for(int i = L->length; i > pos - 1 ; i--){
         L->data[i] = L->data[i-1];
     }
-    L->data[pos - 1 ] = data;
+    L->data[pos - 1] = data;
     L->length++;
     printf("Success to insert.\n");
     return true;
