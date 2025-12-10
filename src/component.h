@@ -131,7 +131,8 @@ class TestPage : public Component {
         draw_subcomponents();
     }
     void clearScreen() {
-        std::cout << "\033[2J\033[H" << std::flush;
+        //std::cout << "\033[2J\033[H" << std::flush;
+        system("cls");
     }
     void print() {
         clearScreen();

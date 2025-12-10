@@ -6,6 +6,7 @@ int main() {
 
     auto page = std::make_unique<Component::TestPage>();
     while (true) {
+        system("cls");
         page->print();
         std::this_thread::sleep_for(std::chrono::milliseconds(500));
     }
