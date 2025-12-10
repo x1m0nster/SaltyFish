@@ -17,15 +17,14 @@ bool Seqlist_DeletePos(Seqlist*L,int pos,int*val);
 
 bool Seqlist_DeleteVal(Seqlist*L,int val);
 
-void Seqlist_GetPos(Seqlist*L,int pos);
+bool Seqlist_GetPos(Seqlist*L,int pos,int* value);
 
-void Seqlist_GetVal(Seqlist* L,int val);
-
-bool Seqlist_Change(Seqlist* L,int newdata,int pos);
+int* Seqlist_GetVal(Seqlist* L,int val);
 
 void Seqlist_Print(Seqlist* L);
 
 void Seqlist_Drop(Seqlist* L);
 
+void Seqlist_test();
 
 #endif
