@@ -110,7 +110,7 @@ bool Linklist_InsertPos(Linklist* L, int pos, ElemType data){
     if(pos==1){
         newnode->next = (*L);
         (*L) = newnode;
-        printf("Success(Linklist_InsertPos):InsertPos is [%d],InsertData is [%d].\n",pos,data);
+        printf("Success(Linklist_InsertPos):InsertPos is [%d].\n",pos);
         return true;
     }
    
@@ -120,14 +120,117 @@ bool Linklist_InsertPos(Linklist* L, int pos, ElemType data){
 
     newnode->next = previous->next;
     previous->next = newnode;
-    printf("Success(Linklist_InsertPos):InsertPos is [%d],InsertData is [%d].\n",pos,data);
+    printf("Success(Linklist_InsertPos):InsertPos is [%d]].\n",pos);
     return true;
 }
 
 bool Linklist_InsertHead(Linklist* L, ElemType data){
-    
+    if (L==NULL){
+        return false;
+    }
+    LNode* newnode = Linklist_CreatNode(data);
+    if(newnode==NULL){
+        return false;
+    }
+    newnode->next = (*L);
+    (*L) = newnode;
+    printf("Success(Linklist_InsertHead):insert the data to the head.\n");
+    return true;
 }
 
+bool Linklist_InsertTail(Linklist* L, ElemType data){
+    if(L==NULL){
+        printf("Error:The Linklist* is nullptr plase check.\n");
+        return false;
+    }
+    LNode* newnode = Linklist_CreatNode(data);
+    if(newnode == NULL){
+        return false;
+    }
+    LNode* pos = (*L);
+    if(pos == NULL){
+        (*L) = newnode;
+        printf("Success(Linklist_InsertTail):insert the data to the end.\n");
+        return true;
+    }
+    while(pos->next!=NULL){
+        pos = pos->next;
+    }
+    pos->next = newnode;
+    printf("Success(Linklist_InsertTail):insert the data to the end.\n");
+    return true;
+}
+
+bool Linklist_DeletePos(Linklist* L, int pos, ElemType* data){
+    if(L==NULL){
+        printf("Error:The Linklist* is nullptr.\n");
+        return false;
+    }
+    if(pos<1){
+        printf("Error(Linklist_DeletePos):The pos is illegal.\n");
+        return false;
+    }
+
+    if(*L==NULL){
+        printf("Error(Linklist_DeletePos):This Linklist is empty so that can't delete data.\n");
+        return false;
+    }
+    if(pos==1){
+        LNode* temp = (*L);
+        (*L) = (*L)->next;
+        free(temp);
+        printf("Success(Linklist_DeletePos):Delete and free the first node.\n");
+        return true;
+    }
+
+    LNode* previous = Linklist_GetPos((*L),pos-1,data);
+
+    if(previous == NULL||previous->next==NULL) return false;
+    LNode* temp = previous->next;
+    *data = temp->data;
+    previous->next = temp->next;
+    free(temp);
+    printf("Success(Linklist_DeletePos):Delete and free the Element which pos is %d\n",pos);
+    return true;
+}
+
+bool Linklist_DeleteVal(Linklist* L, ElemType val){
+    if(L==NULL){
+        printf("Error:The Linklist* is nullptr please check.\n");
+        return false;
+    }
+    if((*L)==NULL){
+        printf("Error(Linklist_DeleteVal):The Linklist is Empty can't delete.\n");
+        return false;
+    }
+    LNode* pos = (*L);
+    int count = 0;
+    while(pos->next!=NULL){
+        if(pos->next->data==val){
+            LNode* temp = pos->next;
+            pos->next = temp->next;
+            free(temp);
+            count++;
+        }
+       else{pos = pos->next;}
+    }
+    if((*L)->data == val){
+        LNode* temp = (*L);
+        (*L) = (*L)->next;
+        free(temp);
+        count++;
+    }
+    printf("Success(Linklist_DeleteVal):Delete Finish [%d]\n ",count);
+    return true;
+}
+
+Linklist Linklist_Reverse(Linklist L){
+    if(L==NULL){
+        printf("Error:Can't reverse this list because it is empty.\n");
+        return NULL;
+    }
+    
+}
 int main(void){
     Linklist L = NULL;
     Linklist_IsEmpty(L);
